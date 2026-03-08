@@ -23,8 +23,8 @@ class CajaService
         try {
             sleep(3);
 
-            return DB::transaction(function () use ($cantidad, $caja) {
-                $bodegas = Bodega::where('sucursal', $caja)
+            return DB::transaction(function () use ($cantidad) {
+                $bodegas = Bodega::where('sucursal', 1)
                     ->where('denominacion', '>', 0)
                     ->orderBy('denominacion', 'desc')
                     ->get();
@@ -58,7 +58,7 @@ class CajaService
                     throw new \Exception("No se puede desglosar la cantidad con las denominaciones disponibles.");
                 }
 
-                $bodegasActualizadas = Bodega::where('sucursal', $caja)
+                $bodegasActualizadas = Bodega::where('sucursal', 1)
                     ->where('denominacion', '>', 0)
                     ->orderBy('denominacion', 'desc')
                     ->get();
@@ -86,7 +86,7 @@ class CajaService
             return ['error' => true, 'status' => 423, 'mensaje' => 'SISTEMA OCUPADO'];
         }
 
-        $lock = Cache::lock("operando_caja_{$caja}", 30);
+        $lock = Cache::lock("operando_caja_{$caja}", 3);
         if (!$lock->get()) {
             $global->release();
             return ['error' => true, 'status' => 423, 'mensaje' => 'Bodega ocupada'];
@@ -95,8 +95,8 @@ class CajaService
         try {
             sleep(3);
 
-            return DB::transaction(function () use ($importe, $caja) {
-                $bodegas = Bodega::where('sucursal', $caja)
+            return DB::transaction(function () use ($importe) {
+                $bodegas = Bodega::where('sucursal', 1)
                     ->where('denominacion', '>', 0)
                     ->orderBy('denominacion', 'desc')
                     ->get();
@@ -109,7 +109,7 @@ class CajaService
                 }
 
                 if ($totalEnCaja < $restante) {
-                    throw new \Exception("La caja no tiene fondos suficientes en total.");
+                    throw new \Exception("No hay fondos suficientes.");
                 }
 
                 $billetesEntregados = [];

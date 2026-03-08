@@ -47,7 +47,7 @@ class CajeroController
 
     public function vercaja($caja)
     {
-        $bodegas = Bodega::where('sucursal', $caja)
+        $bodegas = Bodega::where('sucursal', 1)
             ->where('denominacion', '>', 0)
             ->orderBy('denominacion', 'desc')
             ->get();
@@ -70,7 +70,7 @@ class CajeroController
                     }
                 });
 
-                $bodegas = Bodega::where('sucursal', $caja)
+                $bodegas = Bodega::where('sucursal', 1)
                     ->where('denominacion', '>', 0)
                     ->orderBy('denominacion', 'desc')
                     ->get();
@@ -101,7 +101,7 @@ class CajeroController
 
         try {
             return DB::transaction(function () use ($caja) {
-                $existeInventario = Bodega::where('sucursal', $caja)
+                $existeInventario = Bodega::where('sucursal', 1)
                     ->where('denominacion', '>', 0)
                     ->exists();
 
