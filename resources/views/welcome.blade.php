@@ -27,7 +27,7 @@
             <div class="w-72 flex flex-col h-full">
                 <div class="p-6 flex items-center justify-between">
                     <h2 class="text-xl font-medium text-white px-2">Cajas</h2>
-                    <button @click="crearNuevaCaja" class="p-2 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors" title="Nueva caja">
+                    <button @click="crearNuevaCaja" class="p-2 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -72,7 +72,7 @@
                         <label class="block text-[10px] font-bold uppercase text-slate-400 mb-3">Monto</label>
                         <div class="flex items-center gap-4">
                             <span class="text-3xl text-slate-300">$</span>
-                            <input type="number" v-model="importe" class="bg-transparent text-4xl font-light w-full outline-none border-none focus:ring-0" placeholder="0">
+                            <input type="number" v-model="importe" min="0" class="bg-transparent text-4xl font-light w-full outline-none border-none focus:ring-0" placeholder="0">
                         </div>
                     </div>
                 </section>
@@ -106,6 +106,36 @@
                 </div>
             </div>
         </main>
+
+        <div v-if="mostrarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 relative mx-4 transform transition-all">
+
+                <button @click="cerrarModal" class="absolute top-5 right-5 p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </button>
+
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">@{{ tituloModal }}</h3>
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-6">Total: $@{{ importeCambiado }}</h2>
+
+                <div class="bg-slate-50 rounded-2xl p-5 mb-6 max-h-60 overflow-y-auto">
+                    <ul class="space-y-3">
+                        <li v-for="item in detalleCambio" :key="item.denominacion" class="flex justify-between items-center text-base border-b border-slate-200/60 pb-2 last:border-0 last:pb-0">
+                            <span class="text-slate-600 font-medium">
+                                @{{item.denominacion > 20 ? 'Billetes' : 'Monedas'}} de: $@{{ item.denominacion }}
+                            </span>
+                            <span class="font-bold text-slate-900 bg-white px-3 py-1 rounded-lg border border-slate-100 shadow-sm">@{{ item.cantidad }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button @click="cerrarModal" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3.5 rounded-xl transition-colors text-lg shadow-md">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+
     </div>
     @vite('resources/js/app.js')
 </body>
